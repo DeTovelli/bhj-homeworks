@@ -1,4 +1,5 @@
 const arrSlides = Array.from(document.querySelectorAll('.slider__item'));
+const arrSlidesDot = Array.from(document.querySelectorAll('.slider__dot'));
 const sliderArrowPrev = document.querySelector('.slider__arrow_prev');
 const sliderArrowNext = document.querySelector('.slider__arrow_next');
 
@@ -25,4 +26,7 @@ function showSlides(n) {
   }
 
   arrSlides[n].className = "slider__item slider__item_active";
+  arrSlidesDot[n].className = "slider__item slider__dot_active";
+
+
 }
