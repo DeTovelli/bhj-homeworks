@@ -6,5 +6,6 @@ textarea.value = localStorage.text;
 textarea.oninput = () => localStorage.text = textarea.value;
 clearBtn.onclick = () => {
     textarea.value = "";
+    localStorage.clear();
     localStorage.text = textarea.value;
 }

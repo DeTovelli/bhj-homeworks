@@ -1,53 +1,50 @@
 const signin = document.getElementById('signin');
 const signinForm = document.getElementById('signin__form');
-const welcome = document.getElementById("welcome")
-const userId = document.getElementById("user_id")
-const signoutBtn = document.getElementById("signout__btn");
+const welcome = document.getElementById("welcome");
+const userId = document.getElementById("user_id");
+const localUserId = localStorage.getItem('userId');
+const signOut = document.getElementById("sign__out");
 
-// localStorage.clear();
+localStorage.clear();
 
 
-if (localStorage.userId) {
-    signin.classList.remove("signin_active")
-    welcome.classList.add("welcome_active");
-    userId.innerHTML = localStorage.userId;
-} else {
-    auth();
+function auth(id) {
+    signin.classList.toggle('signin_active');
+    welcome.classList.toggle('welcome_active');
+    userId.innerText = id;
+}   
+
+if (localUserId != null) {
+    auth(localUserId);
 }
 
-signoutBtn.onclick = () => {
-    signin.classList.add("signin_active")
-    welcome.classList.remove("welcome_active");
-    localStorage.clear();
-}
+signinForm.addEventListener('submit', function (e) {
+    let formData = new FormData(signinForm);
+    let request = new XMLHttpRequest();
+    request.responseType = 'json';
+    request.open('POST', 'https://students.netoservices.ru/nestjs-backend/auth', true);
+    request.send(formData);
 
-function auth() {
-    signinForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        let formData = new FormData(signinForm);
-        let request = new XMLHttpRequest();
-        request.open('POST', 'https://students.netoservices.ru/nestjs-backend/auth');
-        request.send(formData);
-        request.onreadystatechange = function () {
-            if (request.readyState === 4) {
-                let data = JSON.parse(this.responseText);
-                if (data.success) {
-                    welcome.classList.add("welcome_active");
-                    signin.classList.remove("signin_active")
-                    localStorage.userId = data.user_id;
-                    userId.innerHTML = localStorage.userId;
-                } else {
-                    alert('Неверный логин/пароль');
-                }
-            }
+    request.addEventListener('load', () => {
+        let authr = request.response;
+    
+        if (authr.success) {
+          localStorage.setItem('userId', auth.user_id);
+          auth(authr.user_id);
+        } else {
+          alert('Неверный логин/пароль');
+          form.reset();
         }
-        clearForm(signinForm.querySelectorAll("input"));
-
+      });
+      e.preventDefault();
     });
-}
+    
+    
+    signOut.addEventListener('click', function () {
+        localStorage.removeItem('userId');
+        auth(null);
+        form.reset();
+    });    
 
-function clearForm(fields) {
-    fields.forEach(field => {
-        field.value = '';
-    })
-}
+
+    
