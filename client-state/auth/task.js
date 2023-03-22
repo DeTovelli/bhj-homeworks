@@ -5,7 +5,7 @@ const userId = document.getElementById("user_id");
 const localUserId = localStorage.getItem('userId');
 const signOut = document.getElementById("sign__out");
 
-localStorage.clear();
+//localStorage.clear();
 
 
 function auth(id) {
@@ -33,18 +33,21 @@ signinForm.addEventListener('submit', function (e) {
           auth(authr.user_id);
         } else {
           alert('Неверный логин/пароль');
-          form.reset();
+          //form.reset();
         }
       });
       e.preventDefault();
     });
     
     
-    signOut.addEventListener('click', function () {
-        localStorage.removeItem('userId');
-        auth(null);
-        form.reset();
-    });    
-
+    window.onload = function() {
+        const storedUserId = localStorage.getItem('id');
+        console.log(storedUserId);
+    
+        if(userId) {
+            userId.textContent = storedUserId;
+            auth();
+        }
+    }
 
     

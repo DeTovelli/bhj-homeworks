@@ -1,11 +1,19 @@
 
 const textarea = document.getElementById("editor");
 const clearBtn = document.getElementById("clear-btn")
+const editorFieldText = {};
 
-textarea.value = localStorage.text;
-textarea.oninput = () => localStorage.text = textarea.value;
-clearBtn.onclick = () => {
-    textarea.value = "";
-    localStorage.clear();
-    localStorage.text = textarea.value;
+textarea.addEventListener('input', (e) => {
+    localStorage.setItem('text', textarea.value);
+});
+
+window.onload = function() {
+	let newText = localStorage.getItem('text');
+	textarea.value = newText;
 }
+
+
+
+
+
+
